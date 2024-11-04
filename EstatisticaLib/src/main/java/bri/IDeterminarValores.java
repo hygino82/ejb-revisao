@@ -16,6 +16,4 @@ public interface IDeterminarValores {
     double getVariancia();
 
     double getDesvioPadrao();
-
-    void calcularValores();
 }

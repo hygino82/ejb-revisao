@@ -8,9 +8,9 @@ import javax.ejb.Singleton;
 @Singleton
 public class EjbEstatistica implements bri.IDeterminarValores {
 
-    private double media, desvioPadrao, variancia;
-    
-    private List<Campo> lista = new ArrayList<>();
+    private double media=0, desvioPadrao=0, variancia=0;
+
+    private final List<Campo> lista = new ArrayList<>();
 
     @Override
     public void inserirCampo(double quantidade, double valor) {
@@ -23,37 +23,39 @@ public class EjbEstatistica implements bri.IDeterminarValores {
     }
 
     @Override
-    public void calcularValores() {
+    public double getMedia() {
         //calculo da media
         double soma = 0.0;
+        double somaQuantidade = 0.0;
+        
         for (Campo c : lista) {
             soma += c.getValor() * c.getQuantidade();
+            somaQuantidade += c.getQuantidade();
         }
 
-        media = soma / lista.size();
-        //calculo da variancia
-        double somaQuadDif = 0.0;
-
-        for (Campo c : lista) {
-            somaQuadDif += c.getQuantidade() * Math.pow(media - c.getValor(), 2);
-        }
-        variancia = somaQuadDif / lista.size();
-
-        desvioPadrao = Math.sqrt(variancia);
-    }
-
-    @Override
-    public double getMedia() {
+        media = soma / somaQuantidade;
         return media;
     }
 
     @Override
     public double getVariancia() {
+        //calculo da variancia
+        final double media = getMedia();
+        double somaQuadDif = 0.0;
+        double somaQuantidade = 0.0;
+        
+        for (Campo c : lista) {
+            somaQuadDif += c.getQuantidade() * Math.pow(media - c.getValor(), 2);
+            somaQuantidade += c.getQuantidade();
+        }
+        variancia = somaQuadDif / somaQuantidade;
+
         return variancia;
     }
 
     @Override
     public double getDesvioPadrao() {
+        desvioPadrao = Math.sqrt(getVariancia());
         return desvioPadrao;
     }
 }

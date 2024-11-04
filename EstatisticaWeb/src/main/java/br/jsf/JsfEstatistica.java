@@ -3,11 +3,11 @@ package br.jsf;
 import bri.IDeterminarValores;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import lombok.*;
 
 @Named(value = "jsfEstatistica")
-@RequestScoped
+@SessionScoped
 public class JsfEstatistica {
 
     @EJB
@@ -34,7 +34,7 @@ public class JsfEstatistica {
     private double desvioPadrao;
 
     public void cadastrarValores() {
-        ejbEstatistica.calcularValores();
+        ejbEstatistica.inserirCampo(quantidade, valor);
         media = ejbEstatistica.getMedia();
         variancia = ejbEstatistica.getVariancia();
         desvioPadrao = ejbEstatistica.getDesvioPadrao();
